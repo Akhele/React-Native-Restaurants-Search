@@ -1,7 +1,7 @@
 import React from 'react';
-import { View,StyleSheet, Text } from 'react-native';
+import { View,StyleSheet, Text,Image } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-
+const br = `\n`;
 const ResultsList = (props) => {
     return (
         <View style={styles.mainView}>
@@ -13,7 +13,14 @@ const ResultsList = (props) => {
                     result => result.id
                 }
                 renderItem={({item}) => {
-                return <Text>{item.name} </Text>
+
+                return (
+                <View style={styles.restaurant}>
+                    <Text>{item.name} </Text>
+                    <Image style={styles.imagestyle} source={{uri: item.image_url}} />
+                    <Text>{br}</Text>                
+                    </View>
+                );
                 }}
             ></FlatList>        
         </View>
@@ -32,6 +39,15 @@ const styles = StyleSheet.create({
     titleStyle: {
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    imagestyle: {
+        height: '100%',
+        width: '100%'
+    },
+    restaurant: {
+        height: 150,
+        width: 200,
+        padding: 5
     }
 });
 
