@@ -4,9 +4,6 @@ import  SearchBar from './../components/SearchBar';
 import yelp from '../api/yelp';
 import useResult from '../hooks/useResult';
 import ResultsList from '../components/ResultsList';
-import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
-
-
 
 const searchScreen = () => {
     const [term, setTerm] = useState('');
