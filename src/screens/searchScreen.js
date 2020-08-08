@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ImagePropTypes} from 'react-native';
 import  SearchBar from './../components/SearchBar';
 import yelp from '../api/yelp';
 import useResult from '../hooks/useResult';
 import ResultsList from '../components/ResultsList';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const searchScreen = () => {
+const searchScreen = (props) => {
     const [term, setTerm] = useState('');
     const [searchApi,results] = useResult();
 
@@ -16,19 +17,21 @@ const searchScreen = () => {
     };
 
     return ( 
-       <View>
+       <>
             <SearchBar 
                 term={term}
                 onTermChange={setTerm}
                 onTermSubmit={() =>searchApi(term)}
                 />
-            <Text>We have found {results.length} restaurant.</Text>
-            
+            <ScrollView >
                 <ResultsList title="Cost Effective" results={filterResultsByPrice('$')} />
                 <ResultsList title="Bit Pricer"     results={filterResultsByPrice('$$')}  />
                 <ResultsList title="Big Spender"    results={filterResultsByPrice('$$$')}  />
+                <ResultsList title="Big Spender"    results={filterResultsByPrice('$$$')}  />
 
-        </View>
+            </ScrollView>
+                
+        </>
     )
 };
 

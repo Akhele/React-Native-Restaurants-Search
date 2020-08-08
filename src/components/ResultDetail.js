@@ -8,8 +8,6 @@ const ResultDetail  = ({result}) =>
             <Image style={styles.imagestyle} source={{uri: result.image_url}} />
             <Text style={styles.ReastaurantName}>{result.name} </Text>
             <Text style={styles.ReastaurantDetails}>{result.rating} Stars, {result.review_count} Reviews </Text>
-
-
         </View>
         )
     };
@@ -24,6 +22,7 @@ const styles = StyleSheet.create({
         height: 200,
         width: 300,
         padding: 5,
+        marginLeft: 15
         
     },
     ReastaurantName : {

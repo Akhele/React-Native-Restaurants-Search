@@ -11,7 +11,7 @@ export default () => {
                 params: {
                     limit: 50,
                     term : searchTerm,
-                    location: 'Tanger'
+                    location: 'Casablanca'
                 }
             });
             setResults(response.data.businesses);
@@ -24,7 +24,7 @@ export default () => {
 //Call SearchApi whene component is ferst rendered
 //searchApi('pasta');
 
-useEffect (() => {searchApi('pasta')}, []);
+useEffect (() => {searchApi('Fish')}, []);
 
 return [searchApi,results];
 };
