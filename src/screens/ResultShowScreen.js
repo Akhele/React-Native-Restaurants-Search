@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, View, Text, Image, Button,Linking} from 'react-native'
+import {StyleSheet, View, Text, Image, Button,Linking, Dimensions} from 'react-native'
 import yelp from '../api/yelp';
 import { FlatList } from 'react-native-gesture-handler';
 import ShadowCard from '../components/ShadowCard';
 import {Card} from 'react-native-shadow-cards';
 
+// Reading the dimentions of the screen :
+    var {width, height} = Dimensions.get('window');
+    console.log("width : " + width +" Height : "+ height);
+// End
 
+
+// Calling the api
 const ResultShowScreen = ({navigation}) => {
     const id = navigation.getParam('id');
     const [result, setResult] = useState(null);
@@ -13,53 +19,75 @@ const ResultShowScreen = ({navigation}) => {
     const getResult = async (id) => {
         const response = await yelp.get(`/${id}`);
         setResult(response.data);
-
     };
+// End Calling
 
-    // Check Retaurant statu : is open
+// Check Retaurant statu : is open
     const statu = () => {
         if (result.location.is_closed === true) {
-            return <Text style={styles.normalText}>Status : closed</Text>
+            return <Text style={{ fontSize: 15,fontWeight: 'bold', color:'red'}}>Status : closed</Text>
         }
-        return <Text style={styles.normalText}>Status : Open</Text>
+        return <Text style={{ fontSize: 15,fontWeight: 'bold', color:'green'}}>Status : Open</Text>
     };
-    // Check phone number : 
+
+// Check phone number : 
     const phoneNumber = () => {
-        if (result.phone != "") {
-        return <Text style={styles.normalText}>Phone : {result.phone}</Text>
+        if (result.display_phone != "") {
+        return <Text style={styles.normalText}>Phone : {result.display_phone}</Text>
+        }
+        else if(result.phone != ""){
+            return <Text style={styles.normalText}>Phone : {result.display_phone}</Text>
         }
         return null
     };
 
-    // End Check
+// End Check
 
-
+// Stop the windows from calling the api many times : only one time 
     useEffect(() => {
         getResult(id);
         
     },[]);
-    
+// End 
+
+// Check if there is any result from the api
     if(!result){
         return null
         } 
     else 
-        {
-            console.log(result);
+        { //console.log(result);
         return (
-            <>
+            < View style={styles.mainView}>
                 <Card style={styles.mainView}>
                     <Text style={styles.title}>{result.name}</Text>
+                    <View
+                        style={{
+                            borderColor: 'black',
+                            borderBottomWidth: 10,
+                        }}
+                        />
+                        {statu()}
+                        {phoneNumber()}
+                        
+                        <Text style={styles.normalText}>City : {result.location.city}</Text>
+                        <Text style={styles.normalText}>Address : {result.location.display_address.toString()}</Text>
+                        <Text style={styles.normalText}>Rationg : {result.rating} Starts</Text>
+                        <Text style={styles.normalText}>Categorie : {result.categories.alias}</Text>
+                    </Card>
 
-                    {statu()}
-                    {phoneNumber()}
+                    <Card style={styles.mainView}>
+                    <Text style={styles.title}>Restaurant picutes :</Text>
 
-                    <Text style={styles.statu}>City : {result.location.city}</Text>
-                    <Text style={styles.statu}>Address : {result.location.display_address.toString()}</Text>
-                    <Text style={styles.statu}>Rationg : {result.rating} Starts</Text>
-                    <Text style={styles.statu}>Categorie : {result.categories.alias}</Text>
-                    <Button title="Retaurant Website" onPress={() => {Linking.openURL(result.url)}}/>
+                    <View
+                        style={{
+                            borderColor: 'black',
+                            borderBottomWidth: 10,
+                        }}
+                        />
 
                     <FlatList
+                        horizontal
+                        showsVerticalScrollIndicator={false}
                         data={result.photos}
                         keyExtractor={(photo) => photo}
                         renderItem={
@@ -69,7 +97,11 @@ const ResultShowScreen = ({navigation}) => {
                         }
                     />
                 </Card>
-             </>
+                <Card style={styles.buttonCard}> 
+                <Button title="Retaurant Website" onPress={() => {Linking.openURL(result.url)}}/>
+
+                </Card>
+             </ View>
         );
         }
     };
@@ -79,23 +111,33 @@ const styles = StyleSheet.create({
     mainView : {
         padding: 10,
         margin: 10,
-        flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-
     },
+    detailCard: {
+        padding: 10,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     imagestyle: {
         height: 200,
-        width: 300,
-        borderRadius: 15
+        width: 350,
+        borderRadius: 15,
+        margin: 10
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
     },
     normalText: {
-
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    buttonCard : {
+        justifyContent:  'space-between'
     }
 });
 
