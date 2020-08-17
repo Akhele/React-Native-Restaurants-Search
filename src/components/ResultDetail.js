@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {View, Text, Image,StyleSheet} from 'react-native';
+
 
 const ResultDetail  = ({result}) => 
     {
+        var imageUrl = './../assets/images/rataurantDefaultImage.png';
+        
+        const checkImage = () => {
+                    if(result.image_url != "")
+                    {
+                       imageUrl = result.image_url;
+                        return <Image style={styles.imagestyle} source={{uri: imageUrl}} />
+                    };
+             
+                return <Image style={styles.imagestyle} source={require('./../assets/images/rataurantDefaultImage.png')}/>
+        };
+
+        
+
+
         return (
         <View style={styles.restaurantView}>
-            <Image style={styles.imagestyle} source={{uri: result.image_url}} />
+            {checkImage()}
             <Text style={styles.ReastaurantName}>{result.name} </Text>
             <Text style={styles.ReastaurantDetails}>{result.rating} Stars, {result.review_count} Reviews </Text>
         </View>
