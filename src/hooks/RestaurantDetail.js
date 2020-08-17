@@ -10,7 +10,7 @@ export default (id) => {
             const response = await yelp.get({id}, {
                 params: {
                     limit: 50,
-                    location: 'Casablanca'
+                    location: 'new york'
                 }
             });
             setResults(response.data);

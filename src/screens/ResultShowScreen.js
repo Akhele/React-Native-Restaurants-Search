@@ -50,12 +50,51 @@ const ResultShowScreen = ({navigation}) => {
     },[]);
 // End 
 
+// Check Coordinates availability : 
+    const isCordinatesAvailable = () => {
+        if(result.coordinates.longitude != "" && result.coordinates.latitude != "")
+            return true;
+        else return false;
+    } 
+
+
+// End
+
+// Open Restaurant in ma
+const openOnMap = () => {
+
+    if(isCordinatesAvailable)
+    {
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${result.coordinates.latitude},${result.coordinates.longitude}`;
+        const label = `${result.name}`;
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+    
+        Linking.openURL(url);
+    }
+    else
+    {
+        alert("Sorry, No coordinates available..")
+    }
+ 
+};
+
+//End map
+
 // Check if there is any result from the api
     if(!result){
         return null
         } 
     else 
-        { //console.log(result);
+        { console.log(result);
+
+            
+
+
+
         return (
             < View style={styles.mainView}>
                 <Card style={styles.mainView}>
@@ -98,8 +137,8 @@ const ResultShowScreen = ({navigation}) => {
                     />
                 </Card>
                 <Card style={styles.buttonCard}> 
-                <Button title="Retaurant Website" onPress={() => {Linking.openURL(result.url)}}/>
-
+                    <Button title="Retaurant Website" onPress={() => {Linking.openURL(result.url)}}/>
+                    <Button title="Open In Map" onPress={() => {openOnMap()}}/>
                 </Card>
              </ View>
         );
@@ -107,6 +146,8 @@ const ResultShowScreen = ({navigation}) => {
     };
 
 
+
+// Styles : 
 const styles = StyleSheet.create({
     mainView : {
         padding: 10,
@@ -137,6 +178,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonCard : {
+        height: 100,
         justifyContent:  'space-between'
     }
 });
