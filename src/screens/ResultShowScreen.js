@@ -94,7 +94,7 @@ const openOnMap = () => {
             
 
 
-
+            {{var i = 0}}
         return (
             < View style={styles.mainView}>
                 <Card style={styles.mainView}>
@@ -107,11 +107,23 @@ const openOnMap = () => {
                         />
                         {statu()}
                         {phoneNumber()}
-                        
                         <Text style={styles.normalText}>City : {result.location.city}</Text>
                         <Text style={styles.normalText}>Address : {result.location.display_address.toString()}</Text>
                         <Text style={styles.normalText}>Rationg : {result.rating} Starts</Text>
-                        <Text style={styles.normalText}>Categorie : {result.categories.alias}</Text>
+                        <Text style={styles.normalText}>Categories : </Text>
+                        <FlatList
+                            horizontal
+                            showsVerticalScrollIndicator={false}
+                            data={result.categories}
+                            keyExtractor={(alias) => `${i++}`}
+                            renderItem={
+                                ({item}) => {
+                                return (
+                                    <Text>{item.alias}, </Text>
+                                )
+                                }
+                            }
+                        />
                     </Card>
 
                     <Card style={styles.mainView}>
@@ -123,7 +135,7 @@ const openOnMap = () => {
                             borderBottomWidth: 10,
                         }}
                         />
-
+                 
                     <FlatList
                         horizontal
                         showsVerticalScrollIndicator={false}
@@ -135,6 +147,7 @@ const openOnMap = () => {
                             }
                         }
                     />
+      
                 </Card>
                 <Card style={styles.buttonCard}> 
                     <Button title="Retaurant Website" onPress={() => {Linking.openURL(result.url)}}/>
